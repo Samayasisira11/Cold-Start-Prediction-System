@@ -1,0 +1,404 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - SmartRecommend</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--primary-color) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color) !important;
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .welcome-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-header h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .welcome-header strong {
+            color: var(--secondary-color);
+        }
+
+        .search-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            outline: none;
+        }
+
+        .search-button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .recommendations {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .recommendations h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            width: 100%;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .product-card {
+                max-width: 100%;
+            }
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .product-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .product-image-container {
+            width: 100%;
+            max-width: 300px;
+            height: 351px;
+            overflow: hidden;
+            border-radius: 10px;
+            margin: 1rem auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .recommendations .product-image-container {
+            width: 180px;
+            height: 150px;
+        }
+
+        .product-rating {
+            color: #f1c40f;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        .product-description {
+            color: #666;
+            margin: 1rem 0;
+        }
+
+        .action-button {
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-delete {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-buy {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+            color: white;
+        }
+
+        .comments-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .comment-form {
+            margin: 1rem 0;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .comment-item {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .comment-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive Sidebar */
+        @media (max-width: 992px) {
+            .sidebar {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-brain me-2"></i>
+                SmartRecommend
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/getproducts">
+                            <i class="fas fa-shopping-bag me-1"></i> Products
+                        </a>
+                    </li>
+                    {% if request.session.role in "admin" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/postproduct">
+                            <i class="fas fa-plus-circle me-1"></i> Post Product
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/transactions">
+                            <i class="fas fa-exchange-alt me-1"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <div class="welcome-header">
+            <h1>Welcome, <strong>{{request.session.username}}</strong></h1>
+            {{form.non_field_errors}}
+        </div>
+
+        <div class="row">
+            {% if request.session.role not in "admin" %}
+            <div class="col-lg-3 sidebar">
+                <div class="recommendations">
+                    <h3>Recommended Products</h3>
+                    {% for recommended in userrecommendations %}
+                    <div class="product-card">
+                        <h4>{{ recommended.name }}</h4>
+                        <div class="product-image-container">
+                            <img src="{% static ''%}{{recommended.path }}" class="product-image" alt="{{ recommended.name }}">
+                        </div>
+                        <h4 class="text-primary">Price: ${{ recommended.price }}</h4>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-lg-9">
+            {% else %}
+            <div class="col-12">
+            {% endif %}
+                <div class="search-form">
+                    <form name="form" action="/search" class="row g-3 align-items-center">
+                        {% csrf_token %}
+                        <div class="col-md-9">
+                            <input type="text" name="query" class="search-input" placeholder="Search products...">
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="search-button w-100">
+                                <i class="fas fa-search me-2"></i> Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="products-container">
+                    {% for productbean in products %}
+                    <div class="product-card">
+                        <div class="product-header">
+                            <h2 class="product-title">{{ productbean.product.name }}</h2>
+                            <div>
+                                {% if request.session.role in "admin" %}
+                                <a href="/deleteproduct?product={{ productbean.product.id }}" class="action-button btn-delete">
+                                    <i class="fas fa-trash me-1"></i> Delete
+                                </a>
+                                {% endif %}
+                                {% if request.session.role not in "admin" %}
+                                <a href="/buyproduct?product={{ productbean.product.id }}" class="action-button btn-buy">
+                                    <i class="fas fa-shopping-cart me-1"></i> Buy Now
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="product-image-container">
+                            <img src="{% static ''%}{{ productbean.product.path }}" class="product-image" alt="{{ productbean.product.name }}">
+                        </div>
+
+                        <p class="product-rating">
+                            <i class="fas fa-star"></i> Rating: {{ productbean.rating }}
+                        </p>
+
+                        <p class="product-description">{{ productbean.description }}</p>
+
+                        <div class="comments-section">
+                            <h3><i class="fas fa-comments me-2"></i>Comments</h3>
+
+                            {% if request.session.role not in "admin" %}
+                            <form name="form" action="/postcomment/" method="POST" class="comment-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="product" value="{{ productbean.product.id }}">
+                                <input type="text" name="text" class="comment-input" placeholder="Write your comment here...">
+                                <button type="submit" class="search-button">
+                                    <i class="fas fa-paper-plane me-2"></i> Post Comment
+                                </button>
+                            </form>
+                            {% endif %}
+
+                            {% for comment in productbean.comments %}
+                            <div class="comment-item">
+                                <div class="comment-meta">
+                                    <i class="fas fa-user me-1"></i> {{ comment.user }} 
+                                    <i class="fas fa-clock ms-2 me-1"></i> {{ comment.datetime }}
+                                </div>
+                                <p class="mb-0">{{ comment.text }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
